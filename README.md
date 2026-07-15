@@ -5,6 +5,10 @@ A **Total Commander Lister (WLX) plugin** that renders Markdown files with a cle
 ![type](https://img.shields.io/badge/type-WLX%20Lister%20plugin-blue) ![platform](https://img.shields.io/badge/platform-Windows%20x64-lightgrey) ![runtime](https://img.shields.io/badge/runtime-WebView2-green)
 
 ---
+### News — v1.3
+
+JAMD has expanded from a Markdown viewer into a multi-format document previewer. It now supports HTML, JSON, YAML, TOML, and Jupyter Notebooks, while
+retaining read-only operation, offline rendering, themes, syntax highlighting, TOC, split view, and improved large-document stability.
 
 ## Features
 
