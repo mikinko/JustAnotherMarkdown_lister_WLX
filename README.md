@@ -1,21 +1,58 @@
 # Just Another MD Lister (JAMD)
 
-A **Total Commander Lister (WLX) plugin** that renders Markdown files with a clean, GitHub-styled preview. Powered by Microsoft **WebView2**, read-only, 64-bit.
+A **Total Commander Lister (WLX) plugin** that renders Markdown files with a clean, GitHub-styled preview. Powered by Microsoft **WebView2**, read-only, 64-bit and 32-bit.
 
-![type](https://img.shields.io/badge/type-WLX%20Lister%20plugin-blue) ![platform](https://img.shields.io/badge/platform-Windows%20x64-lightgrey) ![runtime](https://img.shields.io/badge/runtime-WebView2-green)
+![type](https://img.shields.io/badge/type-WLX%20Lister%20plugin-blue) ![platform](https://img.shields.io/badge/platform-Windows%20x64%20%7C%20x86-lightgrey) ![runtime](https://img.shields.io/badge/runtime-WebView2-green)
 
 ---
-### News — v1.3
+### News — v1.6: Pele diagrams
 
-JAMD has expanded from a Markdown viewer into a multi-format document previewer. It now supports HTML, JSON, YAML, TOML, and Jupyter Notebooks, while
-retaining read-only operation, offline rendering, themes, syntax highlighting, TOC, split view, and improved large-document stability.
+![Pele-rendered Gantt and Git graph diagrams in the JAMD lister](ScreenShots/pele-mermaid.png)
+
+Mermaid diagrams can now be drawn by **[Pele](https://pele.run)**, a new renderer
+that is about **5× faster** than Mermaid and one-eighth of its size.
+
+- **Settings ▸ Diagrams**: Mermaid or Pele (`Diagrams=mermaid|pele`). 58 sample
+  diagrams render in 275 ms instead of 1,600 ms; light/dark switches recolour
+  them instantly.
+- 30+ diagram types: flowchart, Gantt, sequence, Git graph, mind map, timeline,
+  C4, Kanban, Sankey, treemap, …
+
+**Now also for 32-bit Total Commander**: `JAMD_lister.wlx` ships beside
+`JAMD_lister.wlx64`, with the same features.
+
+**Also new in 1.6**
+- **`[[Wiki links]]`** open the linked note; **backlinks** list the notes that link here
+- **Front matter** shown as a properties card instead of a stray rule and heading
+- **Section path** above the document (`file › Chapter › Section`), clickable
+- **Scrollbar marks** for headings, find hits and warnings
+- **Document checks**: heading jumps, duplicate headings, dead anchors, missing alt text
+- `Ctrl+Shift+M` **focus mode**, `Ctrl+Shift+C` **copy as rich text** (paste into Outlook / Word)
+- Optional features are one 0/1 key each in `JAMD.ini` (see `JAMD.ini.sample`)
+
+**Faster** (6,000-block document)
+- About **4× faster scrolling**: the contents pane no longer re-lays the whole
+  preview on every scroll frame.
+- First paint is about 35 % quicker.
+- Prism loads only when a document needs it.
+
+**Libraries**: Mermaid 12.2, KaTeX 0.19, markdown-it 15.0.3, DOMPurify 3.4.17.
+
+The lister shares its source and `lib\` with the
+[JAMD Editor](https://github.com/mikinko/JustAnotherMD_Editor). Installed in
+the same folder, both use one `JAMD.ini`, and a library update made in the
+editor reaches the lister too.
+
+*Earlier — v1.3:* JAMD grew from a Markdown viewer into a multi-format
+previewer for HTML, JSON, YAML, TOML and Jupyter notebooks.
 
 ## Features
 
 ### Rendering
 - **GitHub-style Markdown** (markdown-it + DOMPurify sanitizer) — read-only, safe
 - **Syntax highlighting** for code blocks — Prism.js, ~297 languages
-- **Mermaid diagrams** (flowcharts, sequence, gantt, …) — lazy-loaded
+- **Mermaid diagrams** (flowcharts, sequence, gantt, …) — lazy-loaded, drawn by Mermaid or the faster **Pele**
+- **KaTeX math**, definition lists, sub/superscript, abbreviations, `{#id .class}` attributes
 - **GFM extras**: tables, task lists, strikethrough, `==highlight==`, footnotes
 - **Alert blockquotes**: `[!NOTE]`, `[!TIP]`, `[!IMPORTANT]`, `[!WARNING]`, `[!CAUTION]`
 - **Heading anchors** with permalink links
@@ -61,7 +98,7 @@ retaining read-only operation, offline rendering, themes, syntax highlighting, T
 
 ## Requirements
 
-- **Windows 10 / 11, 64-bit** + a 64-bit **Total Commander**.
+- **Windows 10 / 11** + **Total Commander** 64-bit (`JAMD_lister.wlx64`) or 32-bit (`JAMD_lister.wlx`).
 - The plugin's C/C++ runtime is **statically linked** — no Visual C++ Redistributable needed.
 - **Microsoft Edge WebView2 Runtime** — required. This is the only external dependency.
 
@@ -105,14 +142,16 @@ The plugin reads this variable automatically — no configuration change require
 
    ```
    …\Totalcmd\plugins\wlx\JAMD_lister\
-   ├─ JAMD_lister.wlx64       ← the plugin
-   ├─ lib\                    ← markdown-it, DOMPurify, Prism, Mermaid
+   ├─ JAMD_lister.wlx64       ← the plugin, 64-bit Total Commander
+   ├─ JAMD_lister.wlx         ← the plugin, 32-bit Total Commander
+   ├─ pluginst.inf            ← lets TC install it on open
+   ├─ lib\                    ← markdown-it, DOMPurify, Prism, Mermaid, Pele, KaTeX
    ├─ themes\                 ← color presets (editable JSON)
-   └─ JAMD_lister.ini         ← created automatically on first run
+   └─ JAMD.ini                ← created automatically on first run
    ```
 
-3. In Total Commander: **Configuration → Options → Plugins → Lister (WLX) → Configure → Add**, and select `JAMD_lister.wlx64`.
-   *(Or drag the `.wlx64` onto the TC window and confirm the install prompt.)*
+3. In Total Commander: **Configuration → Options → Plugins → Lister (WLX) → Configure → Add**, and select `JAMD_lister.wlx64` (64-bit TC) or `JAMD_lister.wlx` (32-bit TC).
+   *(Or open the release ZIP in TC and confirm the install prompt; it picks the right one.)*
 4. Open any `.md` / `.markdown` file in Lister (`F3`). The plugin handles it automatically.
 
 **Supported extensions:** `.md`, `.markdown`, `.mdown`, `.mkd`, `.mkdn`
@@ -121,12 +160,14 @@ The plugin reads this variable automatically — no configuration change require
 
 ## Configuration
 
-Settings are stored in `JAMD_lister.ini` under the `[JAMD_lister]` section and are also editable in-app via the ⚙ settings panel.
+Settings are stored in `JAMD.ini` under the `[JAMD]` section, shared with the editor. The everyday ones are also in the ⚙ settings panel; `JAMD.ini.sample` documents every key.
 
 | Key | Meaning | Values |
 |-----|---------|--------|
 | `Theme` | Color theme | `system` (default), `github-light`, `github-dark`, or a preset name from `themes/` |
 | `CodeTheme` | Code highlight style | `auto` (default), `github-light`, `github-dark`, `prism`, `okaidia`, `tomorrow`, `solarized-light` |
+| `Diagrams` | Diagram renderer | `mermaid` (default), `pele` |
+| `WikiLinks`, `Backlinks`, `FrontMatter`, `Breadcrumb`, `ScrollMarks`, `DocLint` | Optional features | `1` (default) / `0` |
 | `TOC` | Table of contents shown | `0` / `1` |
 | `Split` | Split source view shown | `0` / `1` |
 | `Bionic` | Bionic reading mode | `0` / `1` |
@@ -146,6 +187,7 @@ Drop a JSON file into `themes/` to add a color preset; it appears in the theme d
 - [markdown-it](https://github.com/markdown-it/markdown-it) + [markdown-it-footnote](https://github.com/markdown-it/markdown-it-footnote) — Markdown engine
 - [DOMPurify](https://github.com/cure53/DOMPurify) — HTML sanitizer
 - [Prism.js](https://prismjs.com/) — syntax highlighting
-- [Mermaid](https://mermaid.js.org/) — diagrams
+- [Mermaid](https://mermaid.js.org/) and [Pele](https://pele.run) — diagrams
+- [KaTeX](https://katex.org/) — math
 - Microsoft [WebView2](https://developer.microsoft.com/microsoft-edge/webview2/) — rendering host
 - Total Commander [WLX SDK](https://www.ghisler.com/plugins.htm)
